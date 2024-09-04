@@ -1,0 +1,96 @@
+body {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+}
+.border-history-panel {
+    margin-top: 30px;
+    background-color: dodgerblue;
+    width: 325px;
+    height: 625px;
+    border: solid black 3px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.history-panel {
+    width: 300px;
+    height: 600px;
+    border: solid black 3px;
+    background-color: white;
+    font-family: "Times New Roman", serif;
+    font-size: 30px;
+}
+.cal-body {
+    margin-top: 30px;
+    width: 500px;
+    height: 625px;
+    border: solid black 3px;
+    border-radius: 10px;
+    background-color: dodgerblue;
+
+}
+
+.buttons-container {
+    width: 475px;
+    height: 312px;
+    margin: 10px;
+}
+
+.screen-operation {
+    width: 475px;
+    height: 200px;
+    border: solid black 3px;
+    border-radius: 10px;
+    margin: 10px;
+    background-color: white;
+
+    font-family: "Times New Roman", serif;
+    font-size: 30px;
+}
+.result-history {
+    width: 475px;
+    height: 60px;
+    border: solid black 3px;
+    border-radius: 10px;
+    margin: 10px;
+    background-color: white;
+
+    font-family: "Times New Roman", serif;
+    font-size: 30px;
+}
+
+p, .text-screen {
+    margin: 10px;
+}
+
+button {
+    margin: 2px 0;
+    width: 115px;
+    height: 58px;
+    background-color: skyblue;
+    border-radius: 10px;
+    font-family: "Arial Black", serif;
+    font-size: 30px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: white;
+}
+
+.clean-history {
+    margin-top: 30px;
+    background-color: darkorange;
+    font-size: 20px;
+    width: 115px;
+    height: 70px;
+}
+
+.clean-history:hover, .c {
+    background-color: orange;
+}
+
+.del {
+    color: red;
+}
