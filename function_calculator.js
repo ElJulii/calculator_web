@@ -24,6 +24,10 @@ const dot = document.querySelector('.dot');
 const equal = document.querySelector('.equal');
 const c = document.querySelector('.c');
 const del = document.querySelector('.del')
+const parenthesis_left = document.querySelector('.parenthesis-left');
+const parenthesis_right = document.querySelector('.parenthesis-right');
+const percent = document.querySelector('.percent');
+const pi = document.querySelector('.pi');
 
 //components fo screen and array of operation
 let result_operation = undefined;
@@ -72,7 +76,11 @@ plus.addEventListener('click', () => {
     screen_operation.textContent += ' + ';
 })
 minus.addEventListener('click', () => {
-    screen_operation.textContent += ' - ';
+    if (isANumber(screen_operation.textContent[screen_operation.textContent.length - 1]) ||
+    screen_operation.textContent.length === 0) {
+        screen_operation.textContent += ' - ';
+    }
+    else screen_operation.textContent += ' ( - ';
 })
 per.addEventListener('click', () => {
     screen_operation.textContent += ' x ';
@@ -86,6 +94,21 @@ sqrt.addEventListener('click', () => {
 pow.addEventListener('click', () => {
     screen_operation.textContent += '^';
 })
+
+parenthesis_left.addEventListener('click', () => {
+    screen_operation.textContent += ' ( '
+})
+parenthesis_right.addEventListener('click', () => {
+    screen_operation.textContent += ' ) '
+})
+
+percent.addEventListener('click', () => {
+    screen_operation.textContent += ' % '
+})
+
+pi.addEventListener('click', () => {
+    screen_operation.textContent += 'π'
+})
 c.addEventListener('click', () => {
     screen_operation.textContent = '';
     screen_result.innerHTML = `<p>0</p>`;
@@ -93,7 +116,12 @@ c.addEventListener('click', () => {
     result_operation = undefined;
 })
 del.addEventListener('click', () => {
-    screen_operation.textContent = screen_operation.textContent.substring(0,  screen_operation.textContent.length - 1);
+    if (screen_operation.textContent[screen_operation.textContent.length - 2] === ' ' ||
+    !isANumber(screen_operation.textContent[screen_operation.textContent.length - 2])) {
+        screen_operation.textContent = screen_operation.textContent.substring(0,  screen_operation.textContent.length - 2);
+    } else {
+        screen_operation.textContent = screen_operation.textContent.substring(0,  screen_operation.textContent.length - 1);
+    }
 
 })
 equal.addEventListener('click', () => {
@@ -115,6 +143,8 @@ const putInside = (textContent) => {
         arrayInside.push(textContent[i])
     }
     arrayInside = arrayInside.filter(x => x !== ' ');
+    // arrayInside = arrayInside.filter(x => x !== '(');
+    // arrayInside = arrayInside.filter(x => x !== ')');
     textContent = arrayInside.join('');
 
     arrayInside = [];
@@ -123,7 +153,7 @@ const putInside = (textContent) => {
     let temporalNum = '';
 
     for (let i = 0; i < textContent.length; i++) {
-        if (isANumber(textContent[i])) {
+        if (isANumber(textContent[i]) || textContent[i] === '-' && !isANumber(textContent[i - 1])) {
             temporalNum += textContent[i];
          }  else {
             arrayInside.push(temporalNum);
@@ -132,14 +162,37 @@ const putInside = (textContent) => {
         }
     }
     arrayInside.push(temporalNum);
-
     arrayInside = arrayInside.filter(x => x !== '');
-
     return arrayInside;
 }
 
 //function to solve an operation
 function resolveOperation(array) {
+    for (let i = 0; i < array.length; i++) {
+        if (array[i] === 'π') array[i] = Math.PI;
+    }
+
+    for (let i = 0; i < array.length; i++) {
+        if (array[i] === '(') {
+            let arrayParenthesis = [];
+            for (let j = i + 1; j < array.length; j++) {
+                if (array[j] !== ')') {
+                    arrayParenthesis.push(array[j]);
+                } else break;
+            }
+            array[i] = resolveOperation(arrayParenthesis);
+            array.splice(i + 1, array.indexOf(')'));
+        }
+    }
+
+    for (let i = 0; i < array.length; i++) {
+        if (array[i] === '%') {
+            array[i - 1] = parseFloat(array[i - 1]) / 100;
+            array.splice(i, 1)
+            console.log(array)
+        }
+    }
+
     for (let i = 0; i < array.length; i++) {
         if (array[i] === '√') {
             array[i] = Math.sqrt(parseFloat(array[i + 1]));
@@ -185,6 +238,7 @@ function resolveOperation(array) {
             result -= parseFloat(array[i + 1]);
         }
     }
+    if (!result.isInteger) return result.toFixed(5);
     return result;
 }
 
@@ -201,3 +255,4 @@ function isANumber (num) {
         num === '0' ||
         num === '.'
 }
+
